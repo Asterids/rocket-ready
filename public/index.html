@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8" />
-	<title>Rocketeer</title>
+	<title>Rocket Roundup</title>
     <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
     <!-- <script src="../src/game.js" defer></script> -->
 		<link href="https://fonts.googleapis.com/css?family=Londrina+Outline|Palanquin" rel="stylesheet">
@@ -10,7 +10,7 @@
 </head>
 <body>
 	<header>
-		<h1>• Rocketeer •</h1>
+		<h1>• Rocket Roundup •</h1>
 		<p>Move with the arrow keys - collect the gems and bring them to the spaceship!</p>
 	</header>
 <div>
@@ -94,16 +94,15 @@ Rocketeer.level1.prototype = {
     this.gems = this.add.group();
     this.gems.enableBody = true;
 
-		let gem = this.gems.create(100, 330, 'gem');
+		let gem = this.gems.create(680, 455, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(100, 330, 'gem');
 		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
 		gem.animations.play('sparkle');
 
 		gem = this.gems.create(310, 330, 'gem');
-		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
-		gem.animations.play('sparkle');
-
-
-		gem = this.gems.create(650, 225, 'gem');
 		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
 		gem.animations.play('sparkle');
 
