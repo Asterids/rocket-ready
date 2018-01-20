@@ -1,0 +1,21 @@
+{
+  "name": "stackathon",
+  "version": "1.0.0",
+  "description": "A nifty little game",
+  "main": "app.js",
+  "scripts": {
+    "test": "test",
+    "start": "node app"
+  },
+  "author": "R. Hill",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "morgan": "^1.9.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "webpack": "^3.10.0"
+  }
+}
