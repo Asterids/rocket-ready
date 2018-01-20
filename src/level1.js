@@ -1,165 +1,162 @@
-let level1 = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+SuperJuju.level1 = function (game) {
+	this.player;
+	this.platforms;
+	this.cursors;
+	this.gems;
+	this.rockets;
+	this.changeTimer;
+	this.countdownText = '';
+	this.levelText = '';
 
-function preload() {
-	level1.load.image('sky', 'assets/Sunrise.png');
-	level1.load.image('ground', 'assets/platform.png');
-  level1.load.image('coffee', 'assets/diamond.png');
-  level1.load.spritesheet('dude', 'assets/dude.png', 32, 48);
-  level1.load.spritesheet('gem', 'assets/gem_pink.png', 32, 32);
-}
+	this.score = 0;
+	this.scoreText = '';
 
-let player;
-let platforms;
-let cursors;
-let gems;
-let coffees;
+	this.result = "Move with arrow keys - collect the gems and put them in the basket!"
+};
 
-let score = 0;
-let scoreText;
+SuperJuju.level1.prototype = {
+	preload: function () {
+		this.load.image('sky', 'assets/Sunrise.png');
+		this.load.image('ground', 'assets/platform.png');
+	  this.load.image('rocket', 'assets/rocket1.png');
+	  this.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+	  this.load.spritesheet('gem', 'assets/gem_pink.png', 32, 32);
+	},
 
-// let gemsHeld = 0;
-// let gemsHeldText;
+	create: function () {
+		this.physics.startSystem(Phaser.Physics.ARCADE);
 
-function create() {
-  //  We're going to be using physics, so enable the Arcade Physics system
-    level1.physics.startSystem(Phaser.Physics.ARCADE);
+    this.add.sprite(0, 0, 'sky');
 
-    //  A simple background for our level1
-    level1.add.sprite(0, 0, 'sky');
+    this.platforms = this.add.group();
+    this.platforms.enableBody = true;
 
-    //  The platforms group contains the ground and the 2 ledges we can jump on
-    platforms = level1.add.group();
-
-    //  We will enable physics for any object that is created in this group
-    platforms.enableBody = true;
-
-    // Here we create the ground.
-    var ground = platforms.create(0, level1.world.height - 64, 'ground');
-
-    //  Scale it to fit the width of the level1 (the original sprite is 400x32 in size)
+    var ground = this.platforms.create(0, this.world.height - 64, 'ground');
     ground.scale.setTo(2, 2);
-
-    //  This stops it from falling away when you jump on it
     ground.body.immovable = true;
 
-    //  Now let's create two ledges
-    // var ledge = platforms.create(400, 400, 'ground');
-    // ledge.body.immovable = true;
-    //
-    // ledge = platforms.create(-150, 250, 'ground');
-    // ledge.body.immovable = true;
-
-    let ledge = platforms.create(350, 450, 'ground');
-    ledge.scale.setTo(0.7, 0.7);
+    let ledge = this.platforms.create(75, 410, 'ground');
+    ledge.scale.setTo(0.5, 0.5);
     ledge.body.immovable = true;
 
-    ledge = platforms.create(-50, 350, 'ground');
-    ledge.scale.setTo(0.7, 0.7);
+    ledge = this.platforms.create(300, 300, 'ground');
+    ledge.scale.setTo(0.5, 0.5);
     ledge.body.immovable = true;
 
-    ledge = platforms.create(450, 250, 'ground');
-    ledge.scale.setTo(0.7, 0.7);
+    ledge = this.platforms.create(550, 200, 'ground');
+    ledge.scale.setTo(0.5, 0.5);
     ledge.body.immovable = true;
 
-    ledge = platforms.create(50, 150, 'ground');
-    ledge.scale.setTo(0.7, 0.7);
-    ledge.body.immovable = true;
+    this.player = this.add.sprite(this.world.width - 32, this.world.height - 150, 'dude');
+    this.physics.arcade.enable(this.player);
 
-    // The player - positioned 32px from the left and 150px from the bottom of the level1
-    player = level1.add.sprite(32, level1.world.height - 150, 'dude');
+    this.player.body.bounce.y = 0.1;
+    this.player.body.gravity.y = 400;
+    this.player.body.collideWorldBounds = true;
 
-    //  We need to enable physics on the player
-    level1.physics.arcade.enable(player);
+    this.player.animations.add('left', [0, 1, 2, 3], 10, true);
+    this.player.animations.add('right', [5, 6, 7, 8], 10, true);
 
-    //  Player physics properties. Give the little guy a slight bounce.
-    player.body.bounce.y = 0.1;
-    player.body.gravity.y = 400;
-    player.body.collideWorldBounds = true;
-
-    //  Our two animations, walking left and right.
-    player.animations.add('left', [0, 1, 2, 3], 10, true);
-    player.animations.add('right', [5, 6, 7, 8], 10, true);
-
-    // group(parent, name, addToStage, enableBody, physicsBodyType)
-    gems = level1.add.group();
-    gems.enableBody = true;
+    this.gems = this.add.group();
+    this.gems.enableBody = true;
 
     for (var i = 0; i < 6; i++) {
-      const gem = gems.create(i * 100, 0, 'gem');
+      const gem = this.gems.create(i * 120 + 20, 0, 'gem');
       gem.body.gravity.y = 60;
       gem.body.bounce.y = 0.5 + Math.random() * 0.2; // will bounce somewhere between 0.7 and 0.9
-      gem.animations.add('turn', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
-      gem.animations.play('turn');
+      gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+      gem.animations.play('sparkle');
     }
 
-    coffees = level1.add.group();
-    coffees.enableBody = true;
+    this.rockets = this.add.group();
+    this.rockets.enableBody = true;
 
-    coffees.create(level1.world.width - 215, level1.world.height - 185, 'coffee')
+    let mothership = this.rockets.create(this.world.width / 2 - 95, this.world.height - 168, 'rocket')
+		mothership.checkWorldBounds = true;
+		mothership.outOfBoundsKill = true;
 
-    // for (var i = 0; i < 2; i++) {
-    //   const coffee = coffees.create(i*400+ 75, -100, 'coffee');
-    //   coffee.body.gravity.y = 100;
-    //   coffee.body.bounce.y = 0.2;
-    // }
+    this.scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '20px', fill: '#000' });
+		this.levelText = this.add.text(this.world.centerX - 50, 16, 'Level 1', {fill: '#000'});
 
-    scoreText = level1.add.text(16, 16, 'Score: 0', { fontSize: '20px', fill: '#000' });
+    this.cursors = this.input.keyboard.createCursorKeys();
+		// this.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
+	},
 
-    cursors = level1.input.keyboard.createCursorKeys();
-}
+	launchRocket: function (rocket) {
+		rocket.body.velocity.y = -200;
+	},
 
-function update() {
-  let hitPlatform = level1.physics.arcade.collide(player, platforms);  // collision check - allows player to collide with platforms
+	loadLevel2: function () {
+		this.state.start('level2');
+	},
 
-  level1.physics.arcade.collide(gems, platforms); // allows stars to collide with platforms
-  level1.physics.arcade.collide(coffees, platforms);
-  level1.physics.arcade.overlap(gems, coffees, depositGem, null, this);
-  level1.physics.arcade.overlap(player, gems, catchGem, null, this);  // (obj1, obj2, overlapCallback, additionalChecksCallback, callbackContext)
-  level1.physics.arcade.overlap(player, coffees, hitByCoffee, null, this);
+	update: function () {
+		let hitPlatform = this.physics.arcade.collide(this.player, this.platforms);  // collision check - allows player to collide with platforms
 
-  player.body.velocity.x = 0;
+	  this.physics.arcade.collide(this.gems, this.platforms); // allows stars to collide with platforms
+	  // this.physics.arcade.collide(this.rockets, this.platforms);
+	  this.physics.arcade.overlap(this.gems, this.rockets, depositGem, null, this);
+	  this.physics.arcade.overlap(this.player, this.gems, catchGem, null, this);  // (obj1, obj2, overlapCallback, additionalChecksCallback, callbackContext)
+	  // this.physics.arcade.overlap(this.player, this.rockets, hitByCoffee, null, this);
 
-  // move back and forth with arrow keys
-  if (cursors.left.isDown) {
-    player.body.velocity.x = -250;
-    player.animations.play('left');
-  }
-  else if (cursors.right.isDown) {
-    player.body.velocity.x = 250;
-    player.animations.play('right');
-  }
-  else {
-    player.animations.stop();
-    player.frame = 4;
-  }
+	  this.player.body.velocity.x = 0;
 
-  // jump!
-  if (cursors.up.isDown && player.body.touching.down && hitPlatform) {
-    player.body.velocity.y = -350;
-  }
+	  // move back and forth with arrow keys
+	  if (this.cursors.left.isDown) {
+	    this.player.body.velocity.x = -250;
+	    this.player.animations.play('left');
+	  }
+	  else if (this.cursors.right.isDown) {
+	    this.player.body.velocity.x = 250;
+	    this.player.animations.play('right');
+	  }
+	  else {
+	    this.player.animations.stop();
+	    this.player.frame = 4;
+	  }
 
-  function catchGem (player, gem) {
-    // gem.kill();
-    // score += 10;
-    // scoreText.text = 'Score: ' + score;
-    gem.body.position = player.body.position;
-    // gemsHeld += 1;
-    // gemsHeldText.text = 'Gems In Hand: ' + gemsHeld;
+		if (!this.rockets.countLiving() > 0) {
+			this.loadLevel2()
+		}
 
-    // gem.body.position.x = player.body.position.x;
-    // gem.body.position.y = player.body.position.y + posCounter;
-  }
+		// if (this.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
+	  //   {
+	        // fireBullet();
+	  //   }
 
-  function depositGem (gem, coffee) {
-    gem.kill();
-    score += 10;
-    scoreText.text = 'Score: ' + score;
+	  // jump!
+	  if (this.cursors.up.isDown && this.player.body.touching.down && hitPlatform) {
+	    this.player.body.velocity.y = -350;
+	  }
 
-  }
+	  function catchGem (player, gem) {
+	    // gem.kill();
+	    // score += 10;
+	    // scoreText.text = 'Score: ' + score;
+	    gem.body.position = player.body.position;
+	  }
 
-  function hitByCoffee (player, coffee) {
-    // player.kill();
-  }
+	  function depositGem (gem, rocket) {
+	    gem.kill();
+	    this.score += 10;
+	    this.scoreText.text = 'Score: ' + this.score;
 
-  console.log("STATE: ", level1.state)
-}
+			if (!this.gems.countLiving() > 0) {
+				this.launchRocket(rocket)
+			}
+	  }
+
+	  // function hitByCoffee (player, rocket) {
+	  //   // player.kill();
+	  // }
+	},
+
+	render: function () {
+		// if (this.changeTimer.tick) {
+		// 	console.log("this.changeTimer", this.changeTimer);
+		// 	this.countdownText = '' + this.changeTimer
+		// } else {
+		// 	this.loadLevel2();
+		// }
+	}
+};
