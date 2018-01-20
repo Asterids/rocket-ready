@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8" />
-	<title>Rocket Roundup</title>
+	<title>Rocket Ready</title>
     <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
     <!-- <script src="../src/game.js" defer></script> -->
 		<link href="https://fonts.googleapis.com/css?family=Londrina+Outline|Palanquin" rel="stylesheet">
@@ -10,7 +10,7 @@
 </head>
 <body>
 	<header>
-		<h1>• Rocket Roundup •</h1>
+		<h1>• Rocket Ready •</h1>
 		<p>Move with the arrow keys - collect the gems and bring them to the spaceship!</p>
 	</header>
 <div>
@@ -98,29 +98,33 @@ Rocketeer.level1.prototype = {
 		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
 		gem.animations.play('sparkle');
 
+		gem = this.gems.create(25, 455, 'gem');
+		gem.animations.add('sparkle', [6, 7, 0, 1, 2, 3, 4, 5], 10, true);
+		gem.animations.play('sparkle');
+
 		gem = this.gems.create(100, 330, 'gem');
-		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.add('sparkle', [3, 4, 5, 6, 7, 0, 1, 2], 10, true);
 		gem.animations.play('sparkle');
 
 		gem = this.gems.create(310, 330, 'gem');
-		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.add('sparkle', [1, 2, 3, 4, 5, 6, 7, 0], 10, true);
 		gem.animations.play('sparkle');
 
 		gem = this.gems.create(700, 225, 'gem');
-		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.add('sparkle', [7, 0, 1, 2, 3, 4, 5, 6], 10, true);
 		gem.animations.play('sparkle');
 
 		gem = this.gems.create(750, 225, 'gem');
-		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.add('sparkle', [1, 2, 3, 4, 5, 6, 7, 0], 10, true);
 		gem.animations.play('sparkle');
 
 
 		gem = this.gems.create(200, 105, 'gem');
-		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.add('sparkle', [5, 6, 7, 0, 1, 2, 3, 4], 10, true);
 		gem.animations.play('sparkle');
 
 		gem = this.gems.create(250, 105, 'gem');
-		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.add('sparkle', [7, 0, 1, 2, 3, 4, 5, 6], 10, true);
 		gem.animations.play('sparkle');
 
     this.rockets = this.add.group();
@@ -308,12 +312,20 @@ Rocketeer.level2.prototype = {
 		this.gems = this.add.group();
 		this.gems.enableBody = true;
 
-		let gem = this.gems.create(570, 330, 'gem');
-		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		let gem = this.gems.create(25, 455, 'gem');
+		gem.animations.add('sparkle', [6, 7, 0, 1, 2, 3, 4, 5], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(725, 455, 'gem');
+		gem.animations.add('sparkle', [6, 7, 0, 1, 2, 3, 4, 5], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(570, 330, 'gem');
+		gem.animations.add('sparkle', [4, 5, 6, 7, 0, 1, 2, 3], 10, true);
 		gem.animations.play('sparkle');
 
 		gem = this.gems.create(620, 330, 'gem');
-		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.add('sparkle', [2, 3, 4, 5, 6, 7, 0, 1], 10, true);
 		gem.animations.play('sparkle');
 
 		gem = this.gems.create(50, 330, 'gem');
@@ -321,15 +333,15 @@ Rocketeer.level2.prototype = {
 		gem.animations.play('sparkle');
 
 		gem = this.gems.create(70, 100, 'gem');
-		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.add('sparkle', [3, 4, 5, 6, 7, 0, 1, 2], 10, true);
 		gem.animations.play('sparkle');
 
 		gem = this.gems.create(665, 95, 'gem');
-		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.add('sparkle', [1, 2, 3, 4, 5, 6, 7, 0], 10, true);
 		gem.animations.play('sparkle');
 
 		gem = this.gems.create(715, 95, 'gem');
-		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.add('sparkle', [6, 7, 0, 1, 2, 3, 4, 5], 10, true);
 		gem.animations.play('sparkle');
 
 
@@ -507,28 +519,36 @@ Rocketeer.level3.prototype = {
     this.gems = this.add.group();
     this.gems.enableBody = true;
 
-		let gem = this.gems.create(90, this.world.height - 95, 'gem');
+		let gem = this.gems.create(90, 455, 'gem');
 		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
 		gem.animations.play('sparkle');
 
-		gem = this.gems.create(140, this.world.height - 95, 'gem');
-		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem = this.gems.create(705, 455, 'gem');
+		gem.animations.add('sparkle', [2, 3, 4, 5, 6, 7, 0, 1], 10, true);
 		gem.animations.play('sparkle');
 
 		gem = this.gems.create(680, 335, 'gem');
-		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.add('sparkle', [5, 6, 7, 0, 1, 2, 3, 4], 10, true);
 		gem.animations.play('sparkle');
 
 		gem = this.gems.create(730, 335, 'gem');
-		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.add('sparkle', [7, 0, 1, 2, 3, 4, 5, 6], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(490, 225, 'gem'); // new, middle
+		gem.animations.add('sparkle', [7, 0, 1, 2, 3, 4, 5, 6], 10, true);
 		gem.animations.play('sparkle');
 
 		gem = this.gems.create(90, 85, 'gem');
 		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
 		gem.animations.play('sparkle');
 
-		gem = this.gems.create(860, 30, 'gem'); // 780, 65
-		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem = this.gems.create(640, 115, 'gem'); // new, top right
+		gem.animations.add('sparkle', [1, 2, 3, 4, 5, 6, 7, 0], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(860, 30, 'gem');
+		gem.animations.add('sparkle', [3, 4, 5, 6, 7, 0, 1, 2], 10, true);
 		gem.animations.play('sparkle');
 
     this.rockets = this.add.group();
