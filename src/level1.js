@@ -1,23 +1,23 @@
-SuperJuju.level1 = function (game) {
+Rocketeer.level1 = function (game) {
 	this.player;
 	this.platforms;
 	this.cursors;
 	this.gems;
 	this.rockets;
-	this.changeTimer;
-	this.countdownText = '';
 	this.levelText = '';
 
-	this.score = 0;
-	this.scoreText = '';
+	this.gemsLeft = 6;
+	this.gemsLeftText = '';
 
-	this.result = "Move with arrow keys - collect the gems and put them in the basket!"
+	this.result = "Move with arrow keys - collect the gems and bring them to the spaceship!"
 };
 
-SuperJuju.level1.prototype = {
+Rocketeer.level1.prototype = {
 	preload: function () {
-		this.load.image('sky', 'assets/Sunrise.png');
-		this.load.image('ground', 'assets/platform.png');
+		this.load.image('sky', 'assets/bg_sunrise.png');
+		this.load.image('ledgeL', 'assets/plat1left.png');
+		this.load.image('ledgeR', 'assets/plat1right.png');
+		this.load.image('ground', 'assets/plat1left.png');
 	  this.load.image('rocket', 'assets/rocket1.png');
 	  this.load.spritesheet('dude', 'assets/dude.png', 32, 48);
 	  this.load.spritesheet('gem', 'assets/gem_pink.png', 32, 32);
@@ -31,23 +31,35 @@ SuperJuju.level1.prototype = {
     this.platforms = this.add.group();
     this.platforms.enableBody = true;
 
-    var ground = this.platforms.create(0, this.world.height - 64, 'ground');
-    ground.scale.setTo(2, 2);
+    let ground = this.platforms.create(-10, this.world.height - 64, 'ground');
+    ground.scale.setTo(1.5, 1.5);
+    ground.body.immovable = true;
+		ground = this.platforms.create(245, this.world.height - 64, 'ground');
+    ground.scale.setTo(1.5, 1.5);
+    ground.body.immovable = true;
+		ground = this.platforms.create(495, this.world.height - 64, 'ground');
+    ground.scale.setTo(1.5, 1.5);
+    ground.body.immovable = true;
+		ground = this.platforms.create(745, this.world.height - 64, 'ground');
+    ground.scale.setTo(1.5, 1.5);
     ground.body.immovable = true;
 
-    let ledge = this.platforms.create(75, 410, 'ground');
-    ledge.scale.setTo(0.5, 0.5);
+    let ledge = this.platforms.create(65, 365, 'ledgeL');
+    ledge.body.immovable = true;
+		ledge = this.platforms.create(180, 365, 'ledgeR');
     ledge.body.immovable = true;
 
-    ledge = this.platforms.create(300, 300, 'ground');
-    ledge.scale.setTo(0.5, 0.5);
+    ledge = this.platforms.create(500, 260, 'ledgeL');
+    ledge.body.immovable = true;
+		ledge = this.platforms.create(650, 260, 'ledgeR');
     ledge.body.immovable = true;
 
-    ledge = this.platforms.create(550, 200, 'ground');
-    ledge.scale.setTo(0.5, 0.5);
+    ledge = this.platforms.create(180, 140, 'ledgeL');
+    ledge.body.immovable = true;
+		ledge = this.platforms.create(230, 140, 'ledgeR');
     ledge.body.immovable = true;
 
-    this.player = this.add.sprite(this.world.width - 32, this.world.height - 150, 'dude');
+    this.player = this.add.sprite(this.world.width / 2, this.world.height - 150, 'dude');
     this.physics.arcade.enable(this.player);
 
     this.player.body.bounce.y = 0.1;
@@ -60,22 +72,46 @@ SuperJuju.level1.prototype = {
     this.gems = this.add.group();
     this.gems.enableBody = true;
 
-    for (var i = 0; i < 6; i++) {
-      const gem = this.gems.create(i * 120 + 20, 0, 'gem');
-      gem.body.gravity.y = 60;
-      gem.body.bounce.y = 0.5 + Math.random() * 0.2; // will bounce somewhere between 0.7 and 0.9
-      gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
-      gem.animations.play('sparkle');
-    }
+		let gem = this.gems.create(100, 330, 'gem');
+		// gem.body.gravity.y = 60;
+		// gem.body.bounce.y = 0.5 + Math.random() * 0.2; // will bounce somewhere between 0.7 and 0.9
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(300, 330, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+
+		gem = this.gems.create(650, 225, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(700, 225, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(750, 225, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+
+		gem = this.gems.create(200, 105, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(250, 105, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
 
     this.rockets = this.add.group();
     this.rockets.enableBody = true;
 
-    let mothership = this.rockets.create(this.world.width / 2 - 95, this.world.height - 168, 'rocket')
+    let mothership = this.rockets.create(165, 265, 'rocket')
 		mothership.checkWorldBounds = true;
 		mothership.outOfBoundsKill = true;
 
-    this.scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '20px', fill: '#000' });
+    this.gemsLeftText = this.add.text(16, 16, 'Gems left: 6', { fontSize: '20px', fill: '#000' });
 		this.levelText = this.add.text(this.world.centerX - 50, 16, 'Level 1', {fill: '#000'});
 
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -119,6 +155,10 @@ SuperJuju.level1.prototype = {
 			this.loadLevel2()
 		}
 
+		if (!this.player.alive) {
+			this.state.start('level1');
+		}
+
 		// if (this.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
 	  //   {
 	        // fireBullet();
@@ -130,20 +170,19 @@ SuperJuju.level1.prototype = {
 	  }
 
 	  function catchGem (player, gem) {
-	    // gem.kill();
-	    // score += 10;
-	    // scoreText.text = 'Score: ' + score;
 	    gem.body.position = player.body.position;
 	  }
 
 	  function depositGem (gem, rocket) {
 	    gem.kill();
-	    this.score += 10;
-	    this.scoreText.text = 'Score: ' + this.score;
 
-			if (!this.gems.countLiving() > 0) {
-				this.launchRocket(rocket)
+			if (this.gemsLeft === 0) {
+				this.launchRocket(rocket);
+			} else {
+				this.gemsLeft -= 1;
 			}
+
+	    this.gemsLeftText.text = 'Gems left: ' + this.gemsLeft;
 	  }
 
 	  // function hitByCoffee (player, rocket) {

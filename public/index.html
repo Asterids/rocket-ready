@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8" />
-	<title>Rocket Juju</title>
+	<title>Rocketeer</title>
     <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
     <!-- <script src="../src/game.js" defer></script> -->
 		<link href="https://fonts.googleapis.com/css?family=Londrina+Outline|Palanquin" rel="stylesheet">
@@ -10,15 +10,15 @@
 </head>
 <body>
 	<header>
-		<h1>Rocket Juju</h1>
+		<h1>• Rocketeer •</h1>
 		<p>Move with the arrow keys - collect the gems and bring them to the spaceship!</p>
 	</header>
 <div>
 <script type="text/javascript" id="game-window">
 
-let SuperJuju = {};
+let Rocketeer = {};
 
-SuperJuju.level1 = function (game) {
+Rocketeer.level1 = function (game) {
 	this.player;
 	this.platforms;
 	this.cursors;
@@ -34,10 +34,12 @@ SuperJuju.level1 = function (game) {
 	this.result = "Move with arrow keys - collect the gems and bring them to the spaceship!"
 };
 
-SuperJuju.level1.prototype = {
+Rocketeer.level1.prototype = {
 	preload: function () {
 		this.load.image('sky', 'assets/bg_sunrise.png');
-		this.load.image('ground', 'assets/platform.png');
+		this.load.image('ledgeL', 'assets/plat1left.png');
+		this.load.image('ledgeR', 'assets/plat1right.png');
+		this.load.image('ground', 'assets/plat1left.png');
 	  this.load.image('rocket', 'assets/rocket1.png');
 	  this.load.spritesheet('dude', 'assets/dude.png', 32, 48);
 	  this.load.spritesheet('gem', 'assets/gem_pink.png', 32, 32);
@@ -51,23 +53,35 @@ SuperJuju.level1.prototype = {
     this.platforms = this.add.group();
     this.platforms.enableBody = true;
 
-    var ground = this.platforms.create(0, this.world.height - 64, 'ground');
-    ground.scale.setTo(3, 3);
+    let ground = this.platforms.create(-10, this.world.height - 64, 'ground');
+    ground.scale.setTo(1.5, 1.5);
+    ground.body.immovable = true;
+		ground = this.platforms.create(245, this.world.height - 64, 'ground');
+    ground.scale.setTo(1.5, 1.5);
+    ground.body.immovable = true;
+		ground = this.platforms.create(495, this.world.height - 64, 'ground');
+    ground.scale.setTo(1.5, 1.5);
+    ground.body.immovable = true;
+		ground = this.platforms.create(745, this.world.height - 64, 'ground');
+    ground.scale.setTo(1.5, 1.5);
     ground.body.immovable = true;
 
-    let ledge = this.platforms.create(75, 410, 'ground');
-    ledge.scale.setTo(0.5, 0.5);
+    let ledge = this.platforms.create(65, 365, 'ledgeL');
+    ledge.body.immovable = true;
+		ledge = this.platforms.create(180, 365, 'ledgeR');
     ledge.body.immovable = true;
 
-    ledge = this.platforms.create(300, 300, 'ground');
-    ledge.scale.setTo(0.5, 0.5);
+    ledge = this.platforms.create(500, 260, 'ledgeL');
+    ledge.body.immovable = true;
+		ledge = this.platforms.create(650, 260, 'ledgeR');
     ledge.body.immovable = true;
 
-    ledge = this.platforms.create(550, 200, 'ground');
-    ledge.scale.setTo(0.5, 0.5);
+    ledge = this.platforms.create(180, 140, 'ledgeL');
+    ledge.body.immovable = true;
+		ledge = this.platforms.create(230, 140, 'ledgeR');
     ledge.body.immovable = true;
 
-    this.player = this.add.sprite(this.world.width - 32, this.world.height - 150, 'dude');
+    this.player = this.add.sprite(this.world.width / 2, this.world.height - 150, 'dude');
     this.physics.arcade.enable(this.player);
 
     this.player.body.bounce.y = 0.1;
@@ -80,18 +94,40 @@ SuperJuju.level1.prototype = {
     this.gems = this.add.group();
     this.gems.enableBody = true;
 
-    for (var i = 0; i < 6; i++) {
-      const gem = this.gems.create(i * 120 + 20, 0, 'gem');
-      gem.body.gravity.y = 60;
-      gem.body.bounce.y = 0.5 + Math.random() * 0.2; // will bounce somewhere between 0.7 and 0.9
-      gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
-      gem.animations.play('sparkle');
-    }
+		let gem = this.gems.create(100, 330, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(310, 330, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+
+		gem = this.gems.create(650, 225, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(700, 225, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(750, 225, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+
+		gem = this.gems.create(200, 105, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(250, 105, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
 
     this.rockets = this.add.group();
     this.rockets.enableBody = true;
 
-    let mothership = this.rockets.create(this.world.width / 2 - 95, this.world.height - 168, 'rocket')
+    let mothership = this.rockets.create(175, 265, 'rocket')
 		mothership.checkWorldBounds = true;
 		mothership.outOfBoundsKill = true;
 
@@ -139,6 +175,10 @@ SuperJuju.level1.prototype = {
 			this.loadLevel2()
 		}
 
+		if (!this.player.alive) {
+			this.state.start('level1');
+		}
+
 		// if (this.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
 	  //   {
 	        // fireBullet();
@@ -150,6 +190,7 @@ SuperJuju.level1.prototype = {
 	  }
 
 	  function catchGem (player, gem) {
+			console.log('PLAYER: ', player)
 	    // gem.kill();
 	    // score += 10;
 	    // scoreText.text = 'Score: ' + score;
@@ -184,7 +225,7 @@ SuperJuju.level1.prototype = {
 
 
 
-SuperJuju.level2 = function (game) {
+Rocketeer.level2 = function (game) {
 	this.player;
 	this.platforms;
 	this.cursors;
@@ -200,13 +241,15 @@ SuperJuju.level2 = function (game) {
 	this.result = "Move with arrow keys - collect the gems and bring them to the spaceship!"
 };
 
-SuperJuju.level2.prototype = {
+Rocketeer.level2.prototype = {
 	preload: function () {
 		this.load.image('sky', 'assets/Sunrise.png');
-		this.load.image('ground', 'assets/platform.png');
+		this.load.image('ledgeL', 'assets/plat1left.png');
+		this.load.image('ledgeR', 'assets/plat1right.png');
+		this.load.image('ground', 'assets/plat1left.png');
 	  this.load.image('rocket', 'assets/rocket1.png');
 	  this.load.spritesheet('dude', 'assets/dude.png', 32, 48);
-	  this.load.spritesheet('gem', 'assets/gem_pink.png', 32, 32);
+	  this.load.spritesheet('gem', 'assets/gem_grey.png', 32, 32);
 	},
 
 	create: function () {
@@ -217,28 +260,43 @@ SuperJuju.level2.prototype = {
     this.platforms = this.add.group();
     this.platforms.enableBody = true;
 
-    var ground = this.platforms.create(0, this.world.height - 64, 'ground');
-    //  Scale it to fit the width of the this (the original sprite is 400x32 in size)
-    ground.scale.setTo(3, 3);
+		let ground = this.platforms.create(-10, this.world.height - 64, 'ground');
+    ground.scale.setTo(1.5, 1.5);
+    ground.body.immovable = true;
+		ground = this.platforms.create(245, this.world.height - 64, 'ground');
+    ground.scale.setTo(1.5, 1.5);
+    ground.body.immovable = true;
+		ground = this.platforms.create(495, this.world.height - 64, 'ground');
+    ground.scale.setTo(1.5, 1.5);
+    ground.body.immovable = true;
+		ground = this.platforms.create(745, this.world.height - 64, 'ground');
+    ground.scale.setTo(1.5, 1.5);
     ground.body.immovable = true;
 
-    let ledge = this.platforms.create(350, 450, 'ground');
-    ledge.scale.setTo(0.7, 0.7);
+    let ledge = this.platforms.create(520, 370, 'ledgeL');
+    ledge.body.immovable = true;
+		ledge = this.platforms.create(630, 370, 'ledgeR');
     ledge.body.immovable = true;
 
-    ledge = this.platforms.create(-50, 350, 'ground');
-    ledge.scale.setTo(0.7, 0.7);
+		ledge = this.platforms.create(-50, 370, 'ledgeR');
     ledge.body.immovable = true;
 
-    ledge = this.platforms.create(450, 250, 'ground');
-    ledge.scale.setTo(0.7, 0.7);
+    ledge = this.platforms.create(330, 240, 'ledgeL');
+    ledge.body.immovable = true;
+		ledge = this.platforms.create(400, 240, 'ledgeR');
     ledge.body.immovable = true;
 
-    ledge = this.platforms.create(50, 150, 'ground');
-    ledge.scale.setTo(0.7, 0.7);
+    ledge = this.platforms.create(50, 135, 'ledgeL');
+    ledge.body.immovable = true;
+		ledge = this.platforms.create(50, 135, 'ledgeR');
     ledge.body.immovable = true;
 
-		this.player = this.add.sprite(this.world.width - 32, this.world.height - 150, 'dude');
+		ledge = this.platforms.create(650, 130, 'ledgeL');
+    ledge.body.immovable = true;
+		ledge = this.platforms.create(720, 130, 'ledgeR');
+    ledge.body.immovable = true;
+
+		this.player = this.add.sprite(this.world.width / 2, this.world.height - 150, 'dude');
 		this.physics.arcade.enable(this.player);
 
 		this.player.body.bounce.y = 0.1;
@@ -251,19 +309,35 @@ SuperJuju.level2.prototype = {
 		this.gems = this.add.group();
 		this.gems.enableBody = true;
 
-		for (var i = 0; i < 8; i++) {
-			const gem = this.gems.create(i * 50, 0, 'gem');
-			console.log("Gem ", i, ": ", gem);
-			gem.body.gravity.y = 60;
-			gem.body.bounce.y = 0.5 + Math.random() * 0.2; // will bounce somewhere between 0.7 and 0.9
-			gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
-			gem.animations.play('sparkle');
-		}
+		let gem = this.gems.create(570, 330, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(620, 330, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(50, 330, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(70, 100, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(665, 95, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(715, 95, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
 
 		this.rockets = this.add.group();
 		this.rockets.enableBody = true;
 
-		let mothership = this.rockets.create(this.world.width - 280, this.world.height - 455, 'rocket')
+		let mothership = this.rockets.create(410, 140, 'rocket')
 		mothership.checkWorldBounds = true;
 		mothership.outOfBoundsKill = true;
 
@@ -348,7 +422,7 @@ SuperJuju.level2.prototype = {
 
 
 
-SuperJuju.level3 = function (game) {
+Rocketeer.level3 = function (game) {
 	this.player;
 	this.platforms;
 	this.cursors;
@@ -364,13 +438,15 @@ SuperJuju.level3 = function (game) {
 	this.result = "Move with arrow keys - collect the gems and bring them to the spaceship!"
 };
 
-SuperJuju.level3.prototype = {
+Rocketeer.level3.prototype = {
 	preload: function () {
 		this.load.image('sky', 'assets/Sunrise.png');
-		this.load.image('ground', 'assets/platform.png');
+		this.load.image('ledgeL', 'assets/plat1left.png');
+		this.load.image('ledgeR', 'assets/plat1right.png');
+		this.load.image('ground', 'assets/plat1left.png');
 	  this.load.image('rocket', 'assets/rocket1.png');
 	  this.load.spritesheet('dude', 'assets/dude.png', 32, 48);
-	  this.load.spritesheet('gem', 'assets/gem_pink.png', 32, 32);
+	  this.load.spritesheet('gem', 'assets/gem_blue.png', 32, 32);
 	},
 
 	create: function () {
@@ -381,31 +457,45 @@ SuperJuju.level3.prototype = {
     this.platforms = this.add.group();
     this.platforms.enableBody = true;
 
-    let ground = this.platforms.create(0, this.world.height - 64, 'ground');
-    ground.scale.setTo(3, 3);
+		let ground = this.platforms.create(-10, this.world.height - 64, 'ground');
+    ground.scale.setTo(1.5, 1.5);
+    ground.body.immovable = true;
+		ground = this.platforms.create(245, this.world.height - 64, 'ground');
+    ground.scale.setTo(1.5, 1.5);
+    ground.body.immovable = true;
+		ground = this.platforms.create(495, this.world.height - 64, 'ground');
+    ground.scale.setTo(1.5, 1.5);
+    ground.body.immovable = true;
+		ground = this.platforms.create(745, this.world.height - 64, 'ground');
+    ground.scale.setTo(1.5, 1.5);
     ground.body.immovable = true;
 
-    let ledge = this.platforms.create(220, 150, 'ground');  // left top
-    ledge.scale.setTo(0.5, 0.5);
+		let ledge = this.platforms.create(590, 370, 'ledgeL');
+    ledge.body.immovable = true;
+		ledge = this.platforms.create(660, 370, 'ledgeR');
     ledge.body.immovable = true;
 
-		ledge = this.platforms.create(590, 375, 'ground');  // right bottom
-    ledge.scale.setTo(0.5, 0.5);
+    ledge = this.platforms.create(280, 260, 'ledgeL');
+    ledge.body.immovable = true;
+		ledge = this.platforms.create(360, 260, 'ledgeR');
     ledge.body.immovable = true;
 
-    ledge = this.platforms.create(-60, 400, 'ground');  // left bottom
-    ledge.scale.setTo(0.5, 0.5);
+    ledge = this.platforms.create(10, 120, 'ledgeL');
+    ledge.body.immovable = true;
+		ledge = this.platforms.create(10, 120, 'ledgeR');
     ledge.body.immovable = true;
 
-    ledge = this.platforms.create(200, 190, 'ground');  // left middle
-    ledge.scale.setTo(0.5, 0.5);
+		ledge = this.platforms.create(585, 150, 'ledgeL');
+    ledge.body.immovable = true;
+		ledge = this.platforms.create(585, 150, 'ledgeR');
     ledge.body.immovable = true;
 
-		ledge = this.platforms.create(575, 175, 'ground');  // right top
-    ledge.scale.setTo(0.5, 0.5);
+		ledge = this.platforms.create(780, 65, 'ledgeL');
+    ledge.body.immovable = true;
+		ledge = this.platforms.create(780, 65, 'ledgeR');
     ledge.body.immovable = true;
 
-    this.player = this.add.sprite(this.world.width - 32, this.world.height - 150, 'dude');
+    this.player = this.add.sprite(this.world.width / 2, this.world.height - 150, 'dude');
     this.physics.arcade.enable(this.player);
 
     this.player.body.bounce.y = 0.1;
@@ -418,18 +508,34 @@ SuperJuju.level3.prototype = {
     this.gems = this.add.group();
     this.gems.enableBody = true;
 
-    for (var i = 0; i < 10; i++) {
-      const gem = this.gems.create(i * 120 + 20, 0, 'gem');
-      gem.body.gravity.y = 60;
-      gem.body.bounce.y = 0.5 + Math.random() * 0.2; // will bounce somewhere between 0.7 and 0.9
-      gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
-      gem.animations.play('sparkle');
-    }
+		let gem = this.gems.create(90, this.world.height - 95, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(140, this.world.height - 95, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(680, 335, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(730, 335, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(90, 85, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(860, 30, 'gem'); // 780, 65
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
 
     this.rockets = this.add.group();
     this.rockets.enableBody = true;
 
-		let mothership = this.rockets.create(225, 180, 'rocket')
+		let mothership = this.rockets.create(320, 160, 'rocket')
 		mothership.checkWorldBounds = true;
 		mothership.outOfBoundsKill = true;
 
@@ -521,10 +627,10 @@ SuperJuju.level3.prototype = {
 
 let game = new Phaser.Game(1000, 550, Phaser.AUTO, '');
 
-game.state.add('level1', SuperJuju.level1);
-game.state.add('level2', SuperJuju.level2);
-game.state.add('level3', SuperJuju.level3);
-game.state.add('level4', SuperJuju.level4);
+game.state.add('level1', Rocketeer.level1);
+game.state.add('level2', Rocketeer.level2);
+game.state.add('level3', Rocketeer.level3);
+game.state.add('level4', Rocketeer.level4);
 
 game.state.start('level1');
 
