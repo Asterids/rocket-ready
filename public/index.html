@@ -11,7 +11,8 @@
 <body>
 	<header>
 		<h1>• Rocket Ready •</h1>
-		<p>Move with the arrow keys - collect the gems and bring them to the spaceship!</p>
+		<p>Our rocket needs power gems to launch! Collect the gems and bring them to the spaceship.</p>
+		<p>Move with the arrow keys</p>
 	</header>
 <div>
 <script type="text/javascript" id="game-window">
@@ -28,8 +29,8 @@ Rocketeer.level1 = function (game) {
 	this.countdownText = '';
 	this.levelText = '';
 
-	this.score = 0;
-	this.scoreText = '';
+	this.gemsLeft = 8;
+	this.gemsLeftText = '';
 
 	this.result = "Move with arrow keys - collect the gems and bring them to the spaceship!"
 };
@@ -134,7 +135,7 @@ Rocketeer.level1.prototype = {
 		mothership.checkWorldBounds = true;
 		mothership.outOfBoundsKill = true;
 
-    this.scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '20px', fill: '#000' });
+    this.gemsLeftText = this.add.text(16, 16, 'Gems left: 8', { fontSize: '20px', fill: '#000' });
 		this.levelText = this.add.text(this.world.centerX - 50, 16, 'Level 1', {fill: '#000'});
 
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -193,17 +194,13 @@ Rocketeer.level1.prototype = {
 	  }
 
 	  function catchGem (player, gem) {
-			console.log('PLAYER: ', player)
-	    // gem.kill();
-	    // score += 10;
-	    // scoreText.text = 'Score: ' + score;
 	    gem.body.position = player.body.position;
 	  }
 
 	  function depositGem (gem, rocket) {
 	    gem.kill();
-	    this.score += 10;
-	    this.scoreText.text = 'Score: ' + this.score;
+	    this.gemsLeft--;
+	    this.gemsLeftText.text = 'Gems left: ' + this.gemsLeft;
 
 			if (!this.gems.countLiving() > 0) {
 				this.launchRocket(rocket)
@@ -238,8 +235,8 @@ Rocketeer.level2 = function (game) {
 	this.countdownText = '';
 	this.levelText = '';
 
-	this.score = 0;
-	this.scoreText = '';
+	this.gemsLeft = 8;
+	this.gemsLeftText = '';
 
 	this.result = "Move with arrow keys - collect the gems and bring them to the spaceship!"
 };
@@ -353,7 +350,7 @@ Rocketeer.level2.prototype = {
 		mothership.outOfBoundsKill = true;
 
 
-		this.scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '20px', fill: '#000' });
+		this.gemsLeftText = this.add.text(16, 16, 'Gems left: 8', { fontSize: '20px', fill: '#000' });
 		this.levelText = this.add.text(this.world.centerX - 50, 16, 'Level 2', {fill: '#000'});
 
 		this.cursors = this.input.keyboard.createCursorKeys();
@@ -412,8 +409,8 @@ Rocketeer.level2.prototype = {
 
 	  function depositGem (gem, rocket) {
 	    gem.kill();
-	    this.score += 10;
-	    this.scoreText.text = 'Score: ' + this.score;
+			this.gemsLeft--;
+	    this.gemsLeftText.text = 'Gems left: ' + this.gemsLeft;
 
 			if (!this.gems.countLiving() > 0) {
 				this.launchRocket(rocket)
@@ -443,8 +440,8 @@ Rocketeer.level3 = function (game) {
 	this.countdownText = '';
 	this.levelText = '';
 
-	this.score = 0;
-	this.scoreText = '';
+	this.gemsLeft = 8;
+	this.gemsLeftText = '';
 
 	this.result = "Move with arrow keys - collect the gems and bring them to the spaceship!"
 };
@@ -558,7 +555,7 @@ Rocketeer.level3.prototype = {
 		mothership.checkWorldBounds = true;
 		mothership.outOfBoundsKill = true;
 
-    this.scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '20px', fill: '#000' });
+    this.gemsLeftText = this.add.text(16, 16, 'Gems left: 8', { fontSize: '20px', fill: '#000' });
 		this.levelText = this.add.text(this.world.centerX - 50, 16, 'Level 3', {fill: '#000'});
 
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -613,16 +610,13 @@ Rocketeer.level3.prototype = {
 	  }
 
 	  function catchGem (player, gem) {
-	    // gem.kill();
-	    // score += 10;
-	    // scoreText.text = 'Score: ' + score;
 	    gem.body.position = player.body.position;
 	  }
 
 	  function depositGem (gem, rocket) {
 	    gem.kill();
-	    this.score += 10;
-	    this.scoreText.text = 'Score: ' + this.score;
+			this.gemsLeft--;
+	    this.gemsLeftText.text = 'Gems left: ' + this.gemsLeft;
 
 			if (!this.gems.countLiving() > 0) {
 				this.launchRocket(rocket)

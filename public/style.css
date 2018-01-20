@@ -6,7 +6,7 @@ body {
 }
 
 header {
-  margin: 0.5em;
+  margin: 0.25em;
   align-self: center;
   display: flex;
   flex-direction: column;
@@ -23,7 +23,7 @@ p {
   margin: 0;
   align-self: center;
   font-family: 'Palanquin', sans-serif;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 canvas {
