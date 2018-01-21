@@ -1,35 +1,35 @@
-RocketReady.level2 = function (game) {
+RocketReady.level3 = function (game) {
 	this.player;
 	this.platforms;
 	this.cursors;
 	this.gems;
 	this.rockets;
-
 	this.monsters;
 
 	this.gemsLeft = 8;
 	this.gemsLeftText = '';
 	this.levelText = '';
 	this.livesText = '';
+
+	this.winText = '';
 };
 
-RocketReady.level2.prototype = {
+RocketReady.level3.prototype = {
 	preload: function () {
 		this.load.image('sky', 'assets/bg_sunrise.png');
 		this.load.image('ledgeL', 'assets/plat1left.png');
 		this.load.image('ledgeR', 'assets/plat1right.png');
-	  this.load.image('rocket', 'assets/rocket1.png');
+		this.load.image('rocket', 'assets/rocket1.png');
 
 		this.load.image('monster', 'assets/spiky-monster.png');
 
 	  this.load.spritesheet('dude', 'assets/dude.png', 32, 48);
-	  this.load.spritesheet('gem', 'assets/gem_grey.png', 32, 32);
+	  this.load.spritesheet('gem', 'assets/gem_blue.png', 32, 32);
 	},
 
 	create: function () {
 		this.physics.startSystem(Phaser.Physics.ARCADE);
-		this.gemsLeft = 8;
-
+		this.gemsleft = 8;
     this.add.sprite(0, 0, 'sky');
 
     this.platforms = this.add.group();
@@ -48,109 +48,108 @@ RocketReady.level2.prototype = {
     ground.scale.setTo(1.5, 1.5);
     ground.body.immovable = true;
 
-    let ledge = this.platforms.create(520, 370, 'ledgeL');
+		let ledge = this.platforms.create(590, 370, 'ledgeL');
     ledge.body.immovable = true;
-		ledge = this.platforms.create(630, 370, 'ledgeR');
-    ledge.body.immovable = true;
-
-		ledge = this.platforms.create(-50, 370, 'ledgeR');
+		ledge = this.platforms.create(660, 370, 'ledgeR');
     ledge.body.immovable = true;
 
-    ledge = this.platforms.create(330, 240, 'ledgeL');
+    ledge = this.platforms.create(280, 260, 'ledgeL');
     ledge.body.immovable = true;
-		ledge = this.platforms.create(400, 240, 'ledgeR');
-    ledge.body.immovable = true;
-
-    ledge = this.platforms.create(50, 135, 'ledgeL');
-    ledge.body.immovable = true;
-		ledge = this.platforms.create(50, 135, 'ledgeR');
+		ledge = this.platforms.create(360, 260, 'ledgeR');
     ledge.body.immovable = true;
 
-		ledge = this.platforms.create(650, 130, 'ledgeL');
+    ledge = this.platforms.create(10, 120, 'ledgeL');
     ledge.body.immovable = true;
-		ledge = this.platforms.create(720, 130, 'ledgeR');
+		ledge = this.platforms.create(10, 120, 'ledgeR');
+    ledge.body.immovable = true;
+
+		ledge = this.platforms.create(585, 150, 'ledgeL');
+    ledge.body.immovable = true;
+		ledge = this.platforms.create(585, 150, 'ledgeR');
+    ledge.body.immovable = true;
+
+		ledge = this.platforms.create(780, 65, 'ledgeL');
+    ledge.body.immovable = true;
+		ledge = this.platforms.create(780, 65, 'ledgeR');
     ledge.body.immovable = true;
 
 
 		this.rockets = this.add.group();
 		this.rockets.enableBody = true;
 
-		let mothership = this.rockets.create(410, 140, 'rocket')
+		let mothership = this.rockets.create(320, 160, 'rocket')
 		mothership.checkWorldBounds = true;
 		mothership.outOfBoundsKill = true;
 
 
-		this.player = this.add.sprite(this.world.width / 2, this.world.height - 150, 'dude');
-		this.physics.arcade.enable(this.player);
+    this.player = this.add.sprite(this.world.width / 2, this.world.height - 150, 'dude');
+    this.physics.arcade.enable(this.player);
 
-		this.player.body.bounce.y = 0.1;
-		this.player.body.gravity.y = 400;
-		this.player.body.collideWorldBounds = true;
+    this.player.body.bounce.y = 0.1;
+    this.player.body.gravity.y = 400;
+    this.player.body.collideWorldBounds = true;
 
-		this.player.animations.add('left', [0, 1, 2, 3], 10, true);
-		this.player.animations.add('right', [5, 6, 7, 8], 10, true);
+    this.player.animations.add('left', [0, 1, 2, 3], 10, true);
+    this.player.animations.add('right', [5, 6, 7, 8], 10, true);
 
+    this.gems = this.add.group();
+    this.gems.enableBody = true;
 
-		this.gems = this.add.group();
-		this.gems.enableBody = true;
-
-		let gem = this.gems.create(25, 455, 'gem');
-		gem.animations.add('sparkle', [6, 7, 0, 1, 2, 3, 4, 5], 10, true);
-		gem.animations.play('sparkle');
-
-		gem = this.gems.create(725, 455, 'gem');
-		gem.animations.add('sparkle', [6, 7, 0, 1, 2, 3, 4, 5], 10, true);
-		gem.animations.play('sparkle');
-
-		gem = this.gems.create(570, 330, 'gem');
-		gem.animations.add('sparkle', [4, 5, 6, 7, 0, 1, 2, 3], 10, true);
-		gem.animations.play('sparkle');
-
-		gem = this.gems.create(620, 330, 'gem');
-		gem.animations.add('sparkle', [2, 3, 4, 5, 6, 7, 0, 1], 10, true);
-		gem.animations.play('sparkle');
-
-		gem = this.gems.create(50, 330, 'gem');
+		let gem = this.gems.create(90, 455, 'gem');
 		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
 		gem.animations.play('sparkle');
 
-		gem = this.gems.create(70, 100, 'gem');
-		gem.animations.add('sparkle', [3, 4, 5, 6, 7, 0, 1, 2], 10, true);
+		gem = this.gems.create(705, 455, 'gem');
+		gem.animations.add('sparkle', [2, 3, 4, 5, 6, 7, 0, 1], 10, true);
 		gem.animations.play('sparkle');
 
-		gem = this.gems.create(665, 95, 'gem');
+		gem = this.gems.create(680, 335, 'gem');
+		gem.animations.add('sparkle', [5, 6, 7, 0, 1, 2, 3, 4], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(730, 335, 'gem');
+		gem.animations.add('sparkle', [7, 0, 1, 2, 3, 4, 5, 6], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(490, 225, 'gem');
+		gem.animations.add('sparkle', [7, 0, 1, 2, 3, 4, 5, 6], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(45, 85, 'gem');
+		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+		gem.animations.play('sparkle');
+
+		gem = this.gems.create(695, 115, 'gem');
 		gem.animations.add('sparkle', [1, 2, 3, 4, 5, 6, 7, 0], 10, true);
 		gem.animations.play('sparkle');
 
-		gem = this.gems.create(715, 95, 'gem');
-		gem.animations.add('sparkle', [6, 7, 0, 1, 2, 3, 4, 5], 10, true);
+		gem = this.gems.create(860, 30, 'gem');
+		gem.animations.add('sparkle', [3, 4, 5, 6, 7, 0, 1, 2], 10, true);
 		gem.animations.play('sparkle');
 
 
 		this.monsters = this.add.group();
 		this.monsters.enableBody = true;
 
-		let monster = this.monsters.create(880, 453, 'monster');
+		let monster = this.monsters.create(225, 453, 'monster');
 		this.physics.arcade.enable(monster);
 		monster.body.collideWorldBounds = true;
-		monster.body.velocity.x = -100;
+		monster.body.velocity.x = 100;
 		monster.body.bounce.setTo(1, 0);
 
-		monster = this.monsters.create(24, 453, 'monster');
+		monster = this.monsters.create(625, 117, 'monster');
 		this.physics.arcade.enable(monster);
-		monster.body.collideWorldBounds = true;
-		monster.body.velocity.x = -100;
-		monster.body.bounce.setTo(1, 0);
 
-		monster = this.monsters.create(130, 101, 'monster');
+		monster = this.monsters.create(105, 86, 'monster');
 		this.physics.arcade.enable(monster);
 
 
-		this.gemsLeftText = this.add.text(16, 16, 'Gems left: 8', { fontSize: '20px', fill: '#000' });
-		this.levelText = this.add.text(this.world.centerX - 50, 16, 'Level 2', {fill: '#000'});
+    this.gemsLeftText = this.add.text(16, 16, 'Gems left: 8', { fontSize: '20px', fill: '#000' });
+		this.levelText = this.add.text(this.world.centerX - 50, 16, 'Level 3', {fill: '#000'});
+		this.winText = this.add.text(this.world.centerX - 50, this.world.height + 200, 'You win!', { fontSize: '32px', fill: '#000' });
 		this.livesText = this.add.text(880, 16, "Lives: " + livesRemaining);
 
-		this.cursors = this.input.keyboard.createCursorKeys();
+    this.cursors = this.input.keyboard.createCursorKeys();
 		// this.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
 	},
 
@@ -159,8 +158,9 @@ RocketReady.level2.prototype = {
 		rocket.body.velocity.y = -200;
 	},
 
-	loadLevel3: function () {
-		this.state.start('level3');
+	loadLevel4: function () {
+		// this.state.start('level4');
+		this.winText.position.y = this.world.centerY - 50;
 	},
 
 	update: function () {
@@ -189,7 +189,8 @@ RocketReady.level2.prototype = {
 	  }
 
 		if (!this.rockets.countLiving() > 0) {
-			this.loadLevel3()
+			this.winText.position.y = 300;
+			this.loadLevel4()
 		}
 
 		// if (this.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
@@ -197,6 +198,7 @@ RocketReady.level2.prototype = {
 	        // fireBullet();
 	  //   }
 
+	  // jump!
 	  if (this.cursors.up.isDown && this.player.body.touching.down && hitPlatform) {
 	    this.player.body.velocity.y = -350;
 	  }
@@ -219,15 +221,19 @@ RocketReady.level2.prototype = {
 			livesRemaining--;
 			this.gemsLeft = 8;
 			if (livesRemaining === 0) {
-				this.state.start('gameOver')
+				this.state.start('gameOver');
 			} else {
-		    this.state.start('level2');
+		    this.state.start('level3');
 			}
 	  }
-
 	},
 
 	render: function () {
-
+		// if (this.changeTimer.tick) {
+		// 	console.log("this.changeTimer", this.changeTimer);
+		// 	this.countdownText = '' + this.changeTimer
+		// } else {
+		// 	this.loadLevel2();
+		// }
 	}
 };
