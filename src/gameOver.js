@@ -1,3 +1,5 @@
+export default let RocketReady = {};
+
 RocketReady.gameOver = function (game) {
 	this.platforms;
 	this.endText = '';

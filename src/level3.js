@@ -1,3 +1,5 @@
+export default let RocketReady = {};
+
 RocketReady.level3 = function (game) {
 	this.player;
 	this.platforms;

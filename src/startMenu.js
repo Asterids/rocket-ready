@@ -1,3 +1,5 @@
+export default let RocketReady = {};
+
 RocketReady.startMenu = function (game) {
 	this.platforms;
 	this.rockets;
