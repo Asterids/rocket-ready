@@ -25,14 +25,13 @@ Rocketeer.level1 = function (game) {
 	this.cursors;
 	this.gems;
 	this.rockets;
-	// this.monsters;
-	this.stars;
+
+	this.monsters;
+	// this.customBounds;
 
 	this.gemsLeft = 8;
 	this.gemsLeftText = '';
 	this.levelText = '';
-
-	this.result = "Move with arrow keys - collect the gems and bring them to the spaceship!"
 };
 
 Rocketeer.level1.prototype = {
@@ -40,11 +39,9 @@ Rocketeer.level1.prototype = {
 		this.load.image('sky', 'assets/bg_sunrise.png');
 		this.load.image('ledgeL', 'assets/plat1left.png');
 		this.load.image('ledgeR', 'assets/plat1right.png');
-		this.load.image('ground', 'assets/plat1left.png');
 	  this.load.image('rocket', 'assets/rocket1.png');
 
-		this.load.image('star', 'assets/spiky-monster.png');
-		// this.load.spritesheet('monster', 'assets/monster.png', 50, 50);
+		this.load.image('monster', 'assets/spiky-monster.png');
 
 	  this.load.spritesheet('dude', 'assets/dude.png', 32, 48);
 	  this.load.spritesheet('gem', 'assets/gem_pink.png', 32, 32);
@@ -58,16 +55,16 @@ Rocketeer.level1.prototype = {
     this.platforms = this.add.group();
     this.platforms.enableBody = true;
 
-    let ground = this.platforms.create(-10, this.world.height - 64, 'ground');
+    let ground = this.platforms.create(-10, this.world.height - 64, 'ledgeL');
     ground.scale.setTo(1.5, 1.5);
     ground.body.immovable = true;
-		ground = this.platforms.create(245, this.world.height - 64, 'ground');
+		ground = this.platforms.create(245, this.world.height - 64, 'ledgeL');
     ground.scale.setTo(1.5, 1.5);
     ground.body.immovable = true;
-		ground = this.platforms.create(495, this.world.height - 64, 'ground');
+		ground = this.platforms.create(495, this.world.height - 64, 'ledgeL');
     ground.scale.setTo(1.5, 1.5);
     ground.body.immovable = true;
-		ground = this.platforms.create(745, this.world.height - 64, 'ground');
+		ground = this.platforms.create(745, this.world.height - 64, 'ledgeL');
     ground.scale.setTo(1.5, 1.5);
     ground.body.immovable = true;
 
@@ -86,9 +83,15 @@ Rocketeer.level1.prototype = {
 		ledge = this.platforms.create(230, 140, 'ledgeR');
     ledge.body.immovable = true;
 
+		this.rockets = this.add.group();
+		this.rockets.enableBody = true;
+
+		let mothership = this.rockets.create(205, 265, 'rocket')
+		mothership.checkWorldBounds = true;
+		mothership.outOfBoundsKill = true;
+
     this.player = this.add.sprite(this.world.width / 2, this.world.height - 150, 'dude');
     this.physics.arcade.enable(this.player);
-		this.player.alive = true;
 
     this.player.body.bounce.y = 0.1;
     this.player.body.gravity.y = 400;
@@ -132,38 +135,18 @@ Rocketeer.level1.prototype = {
 		gem.animations.add('sparkle', [7, 0, 1, 2, 3, 4, 5, 6], 10, true);
 		gem.animations.play('sparkle');
 
-    this.rockets = this.add.group();
-    this.rockets.enableBody = true;
+		this.monsters = this.add.group();
+		this.monsters.enableBody = true;
 
-    let mothership = this.rockets.create(205, 265, 'rocket')
-		mothership.checkWorldBounds = true;
-		mothership.outOfBoundsKill = true;
+		let monster = this.monsters.create(880, 453, 'monster');
+		this.physics.arcade.enable(monster);
+		monster.body.collideWorldBounds = true;
+		monster.body.velocity.x = -100;
+		monster.body.bounce.setTo(1, 0);
 
-		this.stars = this.add.group();
-		this.stars.enableBody = true;
-
-		// let star = this.stars.create(580, 453, 'star');
-		// this.physics.arcade.enable(star);
-    //
-		// star = this.stars.create(150, 330, 'star');
-		// this.physics.arcade.enable(star);
-
-		// this.monsters = this.add.group();
-    // this.monsters.enableBody = true;
-		// this.physics.arcade.enable(this.monsters);
-
-		// let monster = this.monsters.create(635, 436, 'monster')
-		// monster.scale.setTo(-1.35, 1.35);
-		// monster.body.immovable = true;
-		// monster.animations.add('idle', [0, 1, 4, 6], 10, true);
-		// monster.animations.play('idle');
-		// console.log("MONSTER.body: ", monster.body);
-    //
-		// monster = this.monsters.create(240, 315, 'monster')
-		// monster.scale.setTo(1.35, 1.35);
-		// monster.body.immovable = true;
-		// monster.animations.add('idle', [4, 6, 0, 1], 10, true);
-		// monster.animations.play('idle');
+		monster = this.monsters.create(150, 330, 'monster');
+		this.physics.arcade.enable(monster);
+		// this.physics.arcade.setBounds()
 
     this.gemsLeftText = this.add.text(16, 16, 'Gems left: 8', { fontSize: '20px', fill: '#000' });
 		this.levelText = this.add.text(this.world.centerX - 50, 16, 'Level 1', {fill: '#000'});
@@ -182,13 +165,13 @@ Rocketeer.level1.prototype = {
 	},
 
 	update: function () {
-		let hitPlatform = this.physics.arcade.collide(this.player, this.platforms);  // collision check - allows player to collide with platforms
+		let hitPlatform = this.physics.arcade.collide(this.player, this.platforms);
 
-	  this.physics.arcade.collide(this.gems, this.platforms); // allows stars to collide with platforms
+	  this.physics.arcade.collide(this.gems, this.platforms);
 	  // this.physics.arcade.collide(this.player, this.monsters);
 	  this.physics.arcade.overlap(this.gems, this.rockets, depositGem, null, this);
 	  this.physics.arcade.overlap(this.player, this.gems, catchGem, null, this);  // (obj1, obj2, overlapCallback, additionalChecksCallback, callbackContext)
-	  this.physics.arcade.overlap(this.player, this.stars, deathByStar, null, this);
+	  this.physics.arcade.overlap(this.player, this.monsters, deathByMonster, null, this);
 
 	  this.player.body.velocity.x = 0;
 
@@ -205,11 +188,9 @@ Rocketeer.level1.prototype = {
 	    this.player.animations.stop();
 	    this.player.frame = 4;
 	  }
-
-		// if (star.onWall) {
-		// 	star.scale.x *= -1;
-		// 	star.body.velocity.x *= -1;
-		// }
+		if (this.cursors.up.isDown && this.player.body.touching.down && hitPlatform) {
+			this.player.body.velocity.y = -350;
+		}
 
 		if (!this.rockets.countLiving() > 0) {
 			this.loadLevel2()
@@ -219,11 +200,6 @@ Rocketeer.level1.prototype = {
 	  //   {
 	        // fireBullet();
 	  //   }
-
-	  // jump!
-	  if (this.cursors.up.isDown && this.player.body.touching.down && hitPlatform) {
-	    this.player.body.velocity.y = -350;
-	  }
 
 	  function catchGem (player, gem) {
 	    gem.body.position = player.body.position;
@@ -239,7 +215,7 @@ Rocketeer.level1.prototype = {
 			}
 	  }
 
-	  function deathByStar (player, star) {
+	  function deathByMonster (player, monster) {
 			this.gemsLeft = 8;
 	    this.state.start('level1');
 	  }
@@ -265,20 +241,22 @@ Rocketeer.level2 = function (game) {
 	this.gems;
 	this.rockets;
 
+	this.monsters;
+
 	this.gemsLeft = 8;
 	this.gemsLeftText = '';
 	this.levelText = '';
-
-	this.result = "Move with arrow keys - collect the gems and bring them to the spaceship!"
 };
 
 Rocketeer.level2.prototype = {
 	preload: function () {
-		this.load.image('sky', 'assets/Sunrise.png');
+		this.load.image('sky', 'assets/bg_sunrise.png');
 		this.load.image('ledgeL', 'assets/plat1left.png');
 		this.load.image('ledgeR', 'assets/plat1right.png');
-		this.load.image('ground', 'assets/plat1left.png');
 	  this.load.image('rocket', 'assets/rocket1.png');
+
+		this.load.image('monster', 'assets/spiky-monster.png');
+
 	  this.load.spritesheet('dude', 'assets/dude.png', 32, 48);
 	  this.load.spritesheet('gem', 'assets/gem_grey.png', 32, 32);
 	},
@@ -291,16 +269,16 @@ Rocketeer.level2.prototype = {
     this.platforms = this.add.group();
     this.platforms.enableBody = true;
 
-		let ground = this.platforms.create(-10, this.world.height - 64, 'ground');
+		let ground = this.platforms.create(-10, this.world.height - 64, 'ledgeL');
     ground.scale.setTo(1.5, 1.5);
     ground.body.immovable = true;
-		ground = this.platforms.create(245, this.world.height - 64, 'ground');
+		ground = this.platforms.create(245, this.world.height - 64, 'ledgeL');
     ground.scale.setTo(1.5, 1.5);
     ground.body.immovable = true;
-		ground = this.platforms.create(495, this.world.height - 64, 'ground');
+		ground = this.platforms.create(495, this.world.height - 64, 'ledgeL');
     ground.scale.setTo(1.5, 1.5);
     ground.body.immovable = true;
-		ground = this.platforms.create(745, this.world.height - 64, 'ground');
+		ground = this.platforms.create(745, this.world.height - 64, 'ledgeL');
     ground.scale.setTo(1.5, 1.5);
     ground.body.immovable = true;
 
@@ -327,6 +305,15 @@ Rocketeer.level2.prototype = {
 		ledge = this.platforms.create(720, 130, 'ledgeR');
     ledge.body.immovable = true;
 
+
+		this.rockets = this.add.group();
+		this.rockets.enableBody = true;
+
+		let mothership = this.rockets.create(410, 140, 'rocket')
+		mothership.checkWorldBounds = true;
+		mothership.outOfBoundsKill = true;
+
+
 		this.player = this.add.sprite(this.world.width / 2, this.world.height - 150, 'dude');
 		this.physics.arcade.enable(this.player);
 
@@ -336,6 +323,7 @@ Rocketeer.level2.prototype = {
 
 		this.player.animations.add('left', [0, 1, 2, 3], 10, true);
 		this.player.animations.add('right', [5, 6, 7, 8], 10, true);
+
 
 		this.gems = this.add.group();
 		this.gems.enableBody = true;
@@ -373,12 +361,23 @@ Rocketeer.level2.prototype = {
 		gem.animations.play('sparkle');
 
 
-		this.rockets = this.add.group();
-		this.rockets.enableBody = true;
+		this.monsters = this.add.group();
+		this.monsters.enableBody = true;
 
-		let mothership = this.rockets.create(410, 140, 'rocket')
-		mothership.checkWorldBounds = true;
-		mothership.outOfBoundsKill = true;
+		let monster = this.monsters.create(880, 453, 'monster');
+		this.physics.arcade.enable(monster);
+		monster.body.collideWorldBounds = true;
+		monster.body.velocity.x = -100;
+		monster.body.bounce.setTo(1, 0);
+
+		monster = this.monsters.create(24, 453, 'monster');
+		this.physics.arcade.enable(monster);
+		monster.body.collideWorldBounds = true;
+		monster.body.velocity.x = -100;
+		monster.body.bounce.setTo(1, 0);
+
+		monster = this.monsters.create(130, 101, 'monster');
+		this.physics.arcade.enable(monster);
 
 
 		this.gemsLeftText = this.add.text(16, 16, 'Gems left: 8', { fontSize: '20px', fill: '#000' });
@@ -400,11 +399,11 @@ Rocketeer.level2.prototype = {
 	update: function () {
 		let hitPlatform = this.physics.arcade.collide(this.player, this.platforms);  // collision check - allows player to collide with platforms
 
-	  this.physics.arcade.collide(this.gems, this.platforms); // allows stars to collide with platforms
+	  this.physics.arcade.collide(this.gems, this.platforms); // allows monsters to collide with platforms
 	  // this.physics.arcade.collide(this.rockets, this.platforms);
 	  this.physics.arcade.overlap(this.gems, this.rockets, depositGem, null, this);
 	  this.physics.arcade.overlap(this.player, this.gems, catchGem, null, this);  // (obj1, obj2, overlapCallback, additionalChecksCallback, callbackContext)
-	  // this.physics.arcade.overlap(this.player, this.rockets, hitByCoffee, null, this);
+	  this.physics.arcade.overlap(this.player, this.monsters, deathByMonster, null, this);
 
 	  this.player.body.velocity.x = 0;
 
@@ -449,9 +448,11 @@ Rocketeer.level2.prototype = {
 			}
 	  }
 
-	  // function hitByCoffee (player, rocket) {
-	  //   // player.kill();
-	  // }
+		function deathByMonster (player, monster) {
+			this.gemsLeft = 8;
+	    this.state.start('level2');
+	  }
+
 	},
 
 	render: function () {
@@ -468,23 +469,24 @@ Rocketeer.level3 = function (game) {
 	this.cursors;
 	this.gems;
 	this.rockets;
+	this.monsters;
 
 	this.gemsLeft = 8;
 	this.gemsLeftText = '';
 	this.levelText = '';
 
 	this.winText = '';
-
-	this.result = "Move with arrow keys - collect the gems and bring them to the spaceship!"
 };
 
 Rocketeer.level3.prototype = {
 	preload: function () {
-		this.load.image('sky', 'assets/Sunrise.png');
+		this.load.image('sky', 'assets/bg_sunrise.png');
 		this.load.image('ledgeL', 'assets/plat1left.png');
 		this.load.image('ledgeR', 'assets/plat1right.png');
-		this.load.image('ground', 'assets/plat1left.png');
-	  this.load.image('rocket', 'assets/rocket1.png');
+		this.load.image('rocket', 'assets/rocket1.png');
+
+		this.load.image('monster', 'assets/spiky-monster.png');
+
 	  this.load.spritesheet('dude', 'assets/dude.png', 32, 48);
 	  this.load.spritesheet('gem', 'assets/gem_blue.png', 32, 32);
 	},
@@ -497,16 +499,16 @@ Rocketeer.level3.prototype = {
     this.platforms = this.add.group();
     this.platforms.enableBody = true;
 
-		let ground = this.platforms.create(-10, this.world.height - 64, 'ground');
+		let ground = this.platforms.create(-10, this.world.height - 64, 'ledgeL');
     ground.scale.setTo(1.5, 1.5);
     ground.body.immovable = true;
-		ground = this.platforms.create(245, this.world.height - 64, 'ground');
+		ground = this.platforms.create(245, this.world.height - 64, 'ledgeL');
     ground.scale.setTo(1.5, 1.5);
     ground.body.immovable = true;
-		ground = this.platforms.create(495, this.world.height - 64, 'ground');
+		ground = this.platforms.create(495, this.world.height - 64, 'ledgeL');
     ground.scale.setTo(1.5, 1.5);
     ground.body.immovable = true;
-		ground = this.platforms.create(745, this.world.height - 64, 'ground');
+		ground = this.platforms.create(745, this.world.height - 64, 'ledgeL');
     ground.scale.setTo(1.5, 1.5);
     ground.body.immovable = true;
 
@@ -534,6 +536,15 @@ Rocketeer.level3.prototype = {
     ledge.body.immovable = true;
 		ledge = this.platforms.create(780, 65, 'ledgeR');
     ledge.body.immovable = true;
+
+
+		this.rockets = this.add.group();
+		this.rockets.enableBody = true;
+
+		let mothership = this.rockets.create(320, 160, 'rocket')
+		mothership.checkWorldBounds = true;
+		mothership.outOfBoundsKill = true;
+
 
     this.player = this.add.sprite(this.world.width / 2, this.world.height - 150, 'dude');
     this.physics.arcade.enable(this.player);
@@ -564,15 +575,15 @@ Rocketeer.level3.prototype = {
 		gem.animations.add('sparkle', [7, 0, 1, 2, 3, 4, 5, 6], 10, true);
 		gem.animations.play('sparkle');
 
-		gem = this.gems.create(490, 225, 'gem'); // new, middle
+		gem = this.gems.create(490, 225, 'gem');
 		gem.animations.add('sparkle', [7, 0, 1, 2, 3, 4, 5, 6], 10, true);
 		gem.animations.play('sparkle');
 
-		gem = this.gems.create(90, 85, 'gem');
+		gem = this.gems.create(45, 85, 'gem');
 		gem.animations.add('sparkle', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
 		gem.animations.play('sparkle');
 
-		gem = this.gems.create(640, 115, 'gem'); // new, top right
+		gem = this.gems.create(695, 115, 'gem');
 		gem.animations.add('sparkle', [1, 2, 3, 4, 5, 6, 7, 0], 10, true);
 		gem.animations.play('sparkle');
 
@@ -580,12 +591,22 @@ Rocketeer.level3.prototype = {
 		gem.animations.add('sparkle', [3, 4, 5, 6, 7, 0, 1, 2], 10, true);
 		gem.animations.play('sparkle');
 
-    this.rockets = this.add.group();
-    this.rockets.enableBody = true;
 
-		let mothership = this.rockets.create(320, 160, 'rocket')
-		mothership.checkWorldBounds = true;
-		mothership.outOfBoundsKill = true;
+		this.monsters = this.add.group();
+		this.monsters.enableBody = true;
+
+		let monster = this.monsters.create(225, 453, 'monster');
+		this.physics.arcade.enable(monster);
+		monster.body.collideWorldBounds = true;
+		monster.body.velocity.x = 100;
+		monster.body.bounce.setTo(1, 0);
+
+		monster = this.monsters.create(625, 117, 'monster');
+		this.physics.arcade.enable(monster);
+
+		monster = this.monsters.create(105, 86, 'monster');
+		this.physics.arcade.enable(monster);
+
 
     this.gemsLeftText = this.add.text(16, 16, 'Gems left: 8', { fontSize: '20px', fill: '#000' });
 		this.levelText = this.add.text(this.world.centerX - 50, 16, 'Level 3', {fill: '#000'});
@@ -608,11 +629,11 @@ Rocketeer.level3.prototype = {
 	update: function () {
 		let hitPlatform = this.physics.arcade.collide(this.player, this.platforms);  // collision check - allows player to collide with platforms
 
-	  this.physics.arcade.collide(this.gems, this.platforms); // allows stars to collide with platforms
+	  this.physics.arcade.collide(this.gems, this.platforms); // allows monsters to collide with platforms
 	  // this.physics.arcade.collide(this.rockets, this.platforms);
 	  this.physics.arcade.overlap(this.gems, this.rockets, depositGem, null, this);
 	  this.physics.arcade.overlap(this.player, this.gems, catchGem, null, this);  // (obj1, obj2, overlapCallback, additionalChecksCallback, callbackContext)
-	  // this.physics.arcade.overlap(this.player, this.rockets, hitByCoffee, null, this);
+	  this.physics.arcade.overlap(this.player, this.monsters, deathByMonster, null, this);
 
 	  this.player.body.velocity.x = 0;
 
@@ -659,9 +680,10 @@ Rocketeer.level3.prototype = {
 			}
 	  }
 
-	  // function hitByCoffee (player, rocket) {
-	  //   // player.kill();
-	  // }
+		function deathByMonster (player, monster) {
+			this.gemsLeft = 8;
+	    this.state.start('level3');
+	  }
 	},
 
 	render: function () {
