@@ -11,8 +11,8 @@
 <body>
 	<header>
 		<h1>• Rocket Ready •</h1>
-		<p>Our rocket needs power gems to launch! Collect the gems and bring them to the spaceship.</p>
-		<p>Move with the arrow keys</p>
+		<p>Our rocket needs power gems to launch!  Use the arrow keys to bring them to the spaceship.</p>
+		<p id="credits">A game by Ruth Hill  •  <a href="http://www.github.com/Asterids">github.com/Asterids</a></p>
 	</header>
 <div>
 <script type="text/javascript" id="game-window">
@@ -43,7 +43,7 @@ Rocketeer.level1.prototype = {
 		this.load.image('ground', 'assets/plat1left.png');
 	  this.load.image('rocket', 'assets/rocket1.png');
 
-		this.load.image('star', 'assets/star.png');
+		this.load.image('star', 'assets/spiky-monster.png');
 		// this.load.spritesheet('monster', 'assets/monster.png', 50, 50);
 
 	  this.load.spritesheet('dude', 'assets/dude.png', 32, 48);
@@ -135,18 +135,18 @@ Rocketeer.level1.prototype = {
     this.rockets = this.add.group();
     this.rockets.enableBody = true;
 
-    let mothership = this.rockets.create(145, 265, 'rocket')
+    let mothership = this.rockets.create(205, 265, 'rocket')
 		mothership.checkWorldBounds = true;
 		mothership.outOfBoundsKill = true;
 
 		this.stars = this.add.group();
 		this.stars.enableBody = true;
 
-		let star = this.stars.create(645, 445, 'star');
-		this.physics.arcade.enable(star)
-
-		star = this.stars.create(240, 325, 'star');
-		this.physics.arcade.enable(star)
+		// let star = this.stars.create(580, 453, 'star');
+		// this.physics.arcade.enable(star);
+    //
+		// star = this.stars.create(150, 330, 'star');
+		// this.physics.arcade.enable(star);
 
 		// this.monsters = this.add.group();
     // this.monsters.enableBody = true;
@@ -173,6 +173,7 @@ Rocketeer.level1.prototype = {
 	},
 
 	launchRocket: function (rocket) {
+		this.player.kill();
 		rocket.body.velocity.y = -200;
 	},
 
@@ -205,12 +206,13 @@ Rocketeer.level1.prototype = {
 	    this.player.frame = 4;
 	  }
 
+		// if (star.onWall) {
+		// 	star.scale.x *= -1;
+		// 	star.body.velocity.x *= -1;
+		// }
+
 		if (!this.rockets.countLiving() > 0) {
 			this.loadLevel2()
-		}
-
-		if (!this.player.alive) {
-			this.state.start('level1');
 		}
 
 		// if (this.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
@@ -239,7 +241,7 @@ Rocketeer.level1.prototype = {
 
 	  function deathByStar (player, star) {
 			this.gemsLeft = 8;
-	    player.kill();
+	    this.state.start('level1');
 	  }
 	},
 
@@ -262,7 +264,6 @@ Rocketeer.level2 = function (game) {
 	this.cursors;
 	this.gems;
 	this.rockets;
-	this.slimes;
 
 	this.gemsLeft = 8;
 	this.gemsLeftText = '';
@@ -388,6 +389,7 @@ Rocketeer.level2.prototype = {
 	},
 
 	launchRocket: function (rocket) {
+		this.player.kill();
 		rocket.body.velocity.y = -200;
 	},
 
@@ -466,11 +468,12 @@ Rocketeer.level3 = function (game) {
 	this.cursors;
 	this.gems;
 	this.rockets;
-	this.slimes;
 
 	this.gemsLeft = 8;
 	this.gemsLeftText = '';
 	this.levelText = '';
+
+	this.winText = '';
 
 	this.result = "Move with arrow keys - collect the gems and bring them to the spaceship!"
 };
@@ -586,17 +589,20 @@ Rocketeer.level3.prototype = {
 
     this.gemsLeftText = this.add.text(16, 16, 'Gems left: 8', { fontSize: '20px', fill: '#000' });
 		this.levelText = this.add.text(this.world.centerX - 50, 16, 'Level 3', {fill: '#000'});
+		this.winText = this.add.text(this.world.centerX - 50, this.world.height + 200, 'You win!', { fontSize: '32px', fill: '#000' });
 
     this.cursors = this.input.keyboard.createCursorKeys();
 		// this.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
 	},
 
 	launchRocket: function (rocket) {
+		this.player.kill();
 		rocket.body.velocity.y = -200;
 	},
 
 	loadLevel4: function () {
-		this.state.start('level4');
+		// this.state.start('level4');
+		this.winText.position.y = this.world.centerY - 50;
 	},
 
 	update: function () {
@@ -625,6 +631,7 @@ Rocketeer.level3.prototype = {
 	  }
 
 		if (!this.rockets.countLiving() > 0) {
+			this.winText.position.y = 300;
 			this.loadLevel4()
 		}
 
