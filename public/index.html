@@ -197,6 +197,7 @@ RocketReady.level1.prototype = {
 		gem.animations.add('sparkle', [7, 0, 1, 2, 3, 4, 5, 6], 10, true);
 		gem.animations.play('sparkle');
 
+
 		this.monsters = this.add.group();
 		this.monsters.enableBody = true;
 
@@ -226,11 +227,13 @@ RocketReady.level1.prototype = {
 	},
 
 	loadLevel2: function () {
-		score += this.score
+		score += this.score;
+		this.score = 0;
 		this.state.start('level2');
 	},
 
 	update: function () {
+		this.gemsLeft = this.gems.countLiving();
 		let hitPlatform = this.physics.arcade.collide(this.player, this.platforms);
 
 	  this.physics.arcade.collide(this.gems, this.platforms);
@@ -475,11 +478,13 @@ RocketReady.level2.prototype = {
 	},
 
 	loadLevel3: function () {
-		score += this.score
+		score += this.score;
+		this.score = 0;
 		this.state.start('level3');
 	},
 
 	update: function () {
+		this.gemsLeft = this.gems.countLiving();
 		let hitPlatform = this.physics.arcade.collide(this.player, this.platforms);  // collision check - allows player to collide with platforms
 
 	  this.physics.arcade.collide(this.gems, this.platforms); // allows monsters to collide with platforms
@@ -719,11 +724,13 @@ RocketReady.level3.prototype = {
 
 	loadLevel4: function () {
 		score += this.score;
+		this.score = 0;
 		// this.state.start('level4');
 		this.state.start('winScreen');
 	},
 
 	update: function () {
+		this.gemsLeft = this.gems.countLiving();
 		let hitPlatform = this.physics.arcade.collide(this.player, this.platforms);  // collision check - allows player to collide with platforms
 
 	  this.physics.arcade.collide(this.gems, this.platforms); // allows monsters to collide with platforms
@@ -837,9 +844,9 @@ RocketReady.winScreen.prototype = {
 	},
 
 	update: function () {
+		score = 0;
+		livesRemaining = 5;
 		if (this.cursors.up.isDown) {
-			score = 0;
-			livesRemaining = 5;
 			this.state.start('level1');
 		}
 	}
@@ -879,9 +886,9 @@ RocketReady.gameOver.prototype = {
 	},
 
 	update: function () {
+		score = 0;
+		livesRemaining = 5;
 		if (this.cursors.up.isDown) {
-			score = 0;
-			livesRemaining = 5;
 			this.state.start('level1');
 		}
 	}
