@@ -8,12 +8,12 @@ RocketReady.level3 = function (game) {
 	this.rockets;
 	this.monsters;
 
+	this.score = 0;
+	this.scoreText = '';
 	this.gemsLeft = 8;
 	this.gemsLeftText = '';
 	this.levelText = '';
 	this.livesText = '';
-
-	this.winText = '';
 };
 
 RocketReady.level3.prototype = {
@@ -146,10 +146,12 @@ RocketReady.level3.prototype = {
 		this.physics.arcade.enable(monster);
 
 
-    this.gemsLeftText = this.add.text(16, 16, 'Gems left: 8', { fontSize: '20px', fill: '#000' });
-		this.levelText = this.add.text(this.world.centerX - 50, 16, 'Level 3', {fill: '#000'});
-		this.winText = this.add.text(this.world.centerX - 50, this.world.height + 200, 'You win!', { fontSize: '32px', fill: '#000' });
-		this.livesText = this.add.text(880, 16, "Lives: " + livesRemaining);
+		this.scoreText = this.add.text(16, 16, 'Score: ' + (score + this.score));
+		this.gemsLeftText = this.add.text(this.world.centerX - 80, 50, '' + this.gemsLeft + ' gems remaining!');
+		this.gemsLeftText.scale.setTo(0.65, 0.65);
+
+		this.levelText = this.add.text(this.world.centerX - 50, 16, 'Level 3');
+		this.livesText = this.add.text(880, 16, 'Lives: ' + livesRemaining);
 
     this.cursors = this.input.keyboard.createCursorKeys();
 		// this.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
@@ -161,22 +163,22 @@ RocketReady.level3.prototype = {
 	},
 
 	loadLevel4: function () {
+		score += this.score;
+		this.score = 0;
 		// this.state.start('level4');
-		this.winText.position.y = this.world.centerY - 50;
+		this.state.start('winScreen');
 	},
 
 	update: function () {
-		let hitPlatform = this.physics.arcade.collide(this.player, this.platforms);  // collision check - allows player to collide with platforms
+		this.gemsLeft = this.gems.countLiving();
+		let hitPlatform = this.physics.arcade.collide(this.player, this.platforms);
 
-	  this.physics.arcade.collide(this.gems, this.platforms); // allows monsters to collide with platforms
-	  // this.physics.arcade.collide(this.rockets, this.platforms);
 	  this.physics.arcade.overlap(this.gems, this.rockets, depositGem, null, this);
 	  this.physics.arcade.overlap(this.player, this.gems, catchGem, null, this);  // (obj1, obj2, overlapCallback, additionalChecksCallback, callbackContext)
 	  this.physics.arcade.overlap(this.player, this.monsters, deathByMonster, null, this);
 
 	  this.player.body.velocity.x = 0;
 
-	  // move back and forth with arrow keys
 	  if (this.cursors.left.isDown) {
 	    this.player.body.velocity.x = -250;
 	    this.player.animations.play('left');
@@ -191,19 +193,17 @@ RocketReady.level3.prototype = {
 	  }
 
 		if (!this.rockets.countLiving() > 0) {
-			this.winText.position.y = 300;
 			this.loadLevel4()
 		}
+
+	  if (this.cursors.up.isDown && this.player.body.touching.down && hitPlatform) {
+	    this.player.body.velocity.y = -350;
+	  }
 
 		// if (this.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
 	  //   {
 	        // fireBullet();
 	  //   }
-
-	  // jump!
-	  if (this.cursors.up.isDown && this.player.body.touching.down && hitPlatform) {
-	    this.player.body.velocity.y = -350;
-	  }
 
 	  function catchGem (player, gem) {
 	    gem.body.position = player.body.position;
@@ -212,9 +212,12 @@ RocketReady.level3.prototype = {
 	  function depositGem (gem, rocket) {
 	    gem.kill();
 			this.gemsLeft--;
-	    this.gemsLeftText.text = 'Gems left: ' + this.gemsLeft;
+	    this.gemsLeftText.text = this.gemsLeft === 1 ? '' + this.gemsLeft + ' gem remaining!' : '' + this.gemsLeft + ' gems remaining!';
+			this.score += 10;
+			this.scoreText.text = 'Score: ' + (score + this.score);
 
 			if (!this.gems.countLiving() > 0) {
+				this.gemsLeftText.text = '';
 				this.launchRocket(rocket)
 			}
 	  }
@@ -222,6 +225,7 @@ RocketReady.level3.prototype = {
 		function deathByMonster (player, monster) {
 			livesRemaining--;
 			this.gemsLeft = 8;
+			this.score = 0;
 			if (livesRemaining === 0) {
 				this.state.start('gameOver');
 			} else {
@@ -231,11 +235,5 @@ RocketReady.level3.prototype = {
 	},
 
 	render: function () {
-		// if (this.changeTimer.tick) {
-		// 	console.log("this.changeTimer", this.changeTimer);
-		// 	this.countdownText = '' + this.changeTimer
-		// } else {
-		// 	this.loadLevel2();
-		// }
 	}
 };

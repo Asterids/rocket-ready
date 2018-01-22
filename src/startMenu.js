@@ -6,7 +6,6 @@ RocketReady.startMenu = function (game) {
 	this.player;
 	this.levelText = '';
 	this.livesText = '';
-	this.gemsLeftText = '';
 	this.instruct1 = '';
 	this.instruct2 = '';
 	this.howToMove = '';
@@ -37,8 +36,8 @@ RocketReady.startMenu.prototype = {
 		ground = this.platforms.create(745, this.world.height - 64, 'ledgeL');
     ground.scale.setTo(1.5, 1.5);
 
+		this.scoreText = this.add.text(16, 16, 'Score: 0');
 		this.levelText = this.add.text(this.world.centerX - 50, 16, 'Level 1');
-		this.gemsLeftText = this.add.text(16, 16, 'Gems left: 0');
 		this.livesText = this.add.text(880, 16, 'Lives: 5')
 
 		this.instruct1 = this.add.text(190, 140, 'Bring the power gems to the spaceship to launch to the next level!');

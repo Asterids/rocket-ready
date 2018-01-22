@@ -1,7 +1,7 @@
 {
   "name": "rocket-ready",
   "version": "1.0.0",
-  "description": "A nifty little game",
+  "description": "An energizing in-browser platformer game",
   "main": "app.js",
   "scripts": {
     "test": "test",

@@ -3,12 +3,12 @@
 <head>
 	<meta charset="UTF-8" />
 	<title>Rocket Ready</title>
+		<link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
     <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
     <!-- <script src="../src/game.js" defer></script> -->
 		<link href="https://fonts.googleapis.com/css?family=Londrina+Outline|Palanquin" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="style.css" />
-		<link rel="icon" href="favicon.ico" type="image/x-icon" />
-		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+
 </head>
 <body>
 	<header>
@@ -236,16 +236,12 @@ RocketReady.level1.prototype = {
 	update: function () {
 		this.gemsLeft = this.gems.countLiving();
 		let hitPlatform = this.physics.arcade.collide(this.player, this.platforms);
-
-	  this.physics.arcade.collide(this.gems, this.platforms);
-	  // this.physics.arcade.collide(this.player, this.monsters);
 	  this.physics.arcade.overlap(this.gems, this.rockets, depositGem, null, this);
 	  this.physics.arcade.overlap(this.player, this.gems, catchGem, null, this);  // (obj1, obj2, overlapCallback, additionalChecksCallback, callbackContext)
 	  this.physics.arcade.overlap(this.player, this.monsters, deathByMonster, null, this);
 
 	  this.player.body.velocity.x = 0;
 
-	  // move back and forth with arrow keys
 	  if (this.cursors.left.isDown) {
 	    this.player.body.velocity.x = -250;
 	    this.player.animations.play('left');
@@ -301,12 +297,6 @@ RocketReady.level1.prototype = {
 	},
 
 	render: function () {
-		// if (this.changeTimer.tick) {
-		// 	console.log("this.changeTimer", this.changeTimer);
-		// 	this.countdownText = '' + this.changeTimer
-		// } else {
-		// 	this.loadLevel2();
-		// }
 	}
 };
 
@@ -486,17 +476,13 @@ RocketReady.level2.prototype = {
 
 	update: function () {
 		this.gemsLeft = this.gems.countLiving();
-		let hitPlatform = this.physics.arcade.collide(this.player, this.platforms);  // collision check - allows player to collide with platforms
-
-	  this.physics.arcade.collide(this.gems, this.platforms); // allows monsters to collide with platforms
-	  // this.physics.arcade.collide(this.rockets, this.platforms);
+		let hitPlatform = this.physics.arcade.collide(this.player, this.platforms);
 	  this.physics.arcade.overlap(this.gems, this.rockets, depositGem, null, this);
 	  this.physics.arcade.overlap(this.player, this.gems, catchGem, null, this);  // (obj1, obj2, overlapCallback, additionalChecksCallback, callbackContext)
 	  this.physics.arcade.overlap(this.player, this.monsters, deathByMonster, null, this);
 
 	  this.player.body.velocity.x = 0;
 
-	  // move back and forth with arrow keys
 	  if (this.cursors.left.isDown) {
 	    this.player.body.velocity.x = -250;
 	    this.player.animations.play('left');
@@ -514,14 +500,14 @@ RocketReady.level2.prototype = {
 			this.loadLevel3()
 		}
 
+	  if (this.cursors.up.isDown && this.player.body.touching.down && hitPlatform) {
+	    this.player.body.velocity.y = -350;
+	  }
+
 		// if (this.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
 	  //   {
 	        // fireBullet();
 	  //   }
-
-	  if (this.cursors.up.isDown && this.player.body.touching.down && hitPlatform) {
-	    this.player.body.velocity.y = -350;
-	  }
 
 	  function catchGem (player, gem) {
 	    gem.body.position = player.body.position;
@@ -554,7 +540,6 @@ RocketReady.level2.prototype = {
 	},
 
 	render: function () {
-
 	}
 };
 
@@ -732,17 +717,14 @@ RocketReady.level3.prototype = {
 
 	update: function () {
 		this.gemsLeft = this.gems.countLiving();
-		let hitPlatform = this.physics.arcade.collide(this.player, this.platforms);  // collision check - allows player to collide with platforms
+		let hitPlatform = this.physics.arcade.collide(this.player, this.platforms);
 
-	  this.physics.arcade.collide(this.gems, this.platforms); // allows monsters to collide with platforms
-	  // this.physics.arcade.collide(this.rockets, this.platforms);
 	  this.physics.arcade.overlap(this.gems, this.rockets, depositGem, null, this);
 	  this.physics.arcade.overlap(this.player, this.gems, catchGem, null, this);  // (obj1, obj2, overlapCallback, additionalChecksCallback, callbackContext)
 	  this.physics.arcade.overlap(this.player, this.monsters, deathByMonster, null, this);
 
 	  this.player.body.velocity.x = 0;
 
-	  // move back and forth with arrow keys
 	  if (this.cursors.left.isDown) {
 	    this.player.body.velocity.x = -250;
 	    this.player.animations.play('left');
@@ -760,15 +742,14 @@ RocketReady.level3.prototype = {
 			this.loadLevel4()
 		}
 
+	  if (this.cursors.up.isDown && this.player.body.touching.down && hitPlatform) {
+	    this.player.body.velocity.y = -350;
+	  }
+
 		// if (this.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
 	  //   {
 	        // fireBullet();
 	  //   }
-
-	  // jump!
-	  if (this.cursors.up.isDown && this.player.body.touching.down && hitPlatform) {
-	    this.player.body.velocity.y = -350;
-	  }
 
 	  function catchGem (player, gem) {
 	    gem.body.position = player.body.position;
@@ -800,12 +781,6 @@ RocketReady.level3.prototype = {
 	},
 
 	render: function () {
-		// if (this.changeTimer.tick) {
-		// 	console.log("this.changeTimer", this.changeTimer);
-		// 	this.countdownText = '' + this.changeTimer
-		// } else {
-		// 	this.loadLevel2();
-		// }
 	}
 };
 

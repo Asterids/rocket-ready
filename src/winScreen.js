@@ -1,13 +1,14 @@
-export default let RocketReady = {};
+export default let RocketReacdy = {};
 
-RocketReady.gameOver = function (game) {
+RocketReady.winScreen = function (game) {
 	this.platforms;
-	this.endText = '';
+	this.youWin = '';
+	this.finalScore = '';
 	this.restart = '';
 	this.cursors;
 }
 
-RocketReady.gameOver.prototype = {
+RocketReady.winScreen.prototype = {
 	preload: function () {
 		this.load.image('sky', 'assets/bg_sunrise.png');
 		this.load.image('ledgeL', 'assets/plat1left.png');
@@ -26,8 +27,9 @@ RocketReady.gameOver.prototype = {
 		ground = this.platforms.create(745, this.world.height - 64, 'ledgeL');
     ground.scale.setTo(1.5, 1.5);
 
-		this.endText = this.add.text(418, 180, 'GAME OVER');
-		this.restart = this.add.text(362, 335, 'Press up ⇧ to restart');
+		this.youWin = this.add.text(440, 160, 'You Win!');
+		this.finalScore = this.add.text(388, 210, ' Final Score: ' + score)
+		this.restart = this.add.text(360, 335, 'Press up ⇧ to restart');
 
 		this.cursors = this.input.keyboard.createCursorKeys();
 	},

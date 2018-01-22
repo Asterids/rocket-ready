@@ -6,9 +6,10 @@ RocketReady.level2 = function (game) {
 	this.cursors;
 	this.gems;
 	this.rockets;
-
 	this.monsters;
 
+	this.score = 0;
+	this.scoreText = '';
 	this.gemsLeft = 8;
 	this.gemsLeftText = '';
 	this.levelText = '';
@@ -148,9 +149,12 @@ RocketReady.level2.prototype = {
 		this.physics.arcade.enable(monster);
 
 
-		this.gemsLeftText = this.add.text(16, 16, 'Gems left: 8', { fontSize: '20px', fill: '#000' });
-		this.levelText = this.add.text(this.world.centerX - 50, 16, 'Level 2', {fill: '#000'});
-		this.livesText = this.add.text(880, 16, "Lives: " + livesRemaining);
+		this.scoreText = this.add.text(16, 16, 'Score: ' + (score + this.score));
+		this.gemsLeftText = this.add.text(this.world.centerX - 80, 50, '' + this.gemsLeft + ' gems remaining!');
+		this.gemsLeftText.scale.setTo(0.65, 0.65);
+
+		this.levelText = this.add.text(this.world.centerX - 50, 16, 'Level 2');
+		this.livesText = this.add.text(880, 16, 'Lives: ' + livesRemaining);
 
 		this.cursors = this.input.keyboard.createCursorKeys();
 		// this.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
@@ -162,21 +166,20 @@ RocketReady.level2.prototype = {
 	},
 
 	loadLevel3: function () {
+		score += this.score;
+		this.score = 0;
 		this.state.start('level3');
 	},
 
 	update: function () {
-		let hitPlatform = this.physics.arcade.collide(this.player, this.platforms);  // collision check - allows player to collide with platforms
-
-	  this.physics.arcade.collide(this.gems, this.platforms); // allows monsters to collide with platforms
-	  // this.physics.arcade.collide(this.rockets, this.platforms);
+		this.gemsLeft = this.gems.countLiving();
+		let hitPlatform = this.physics.arcade.collide(this.player, this.platforms);
 	  this.physics.arcade.overlap(this.gems, this.rockets, depositGem, null, this);
 	  this.physics.arcade.overlap(this.player, this.gems, catchGem, null, this);  // (obj1, obj2, overlapCallback, additionalChecksCallback, callbackContext)
 	  this.physics.arcade.overlap(this.player, this.monsters, deathByMonster, null, this);
 
 	  this.player.body.velocity.x = 0;
 
-	  // move back and forth with arrow keys
 	  if (this.cursors.left.isDown) {
 	    this.player.body.velocity.x = -250;
 	    this.player.animations.play('left');
@@ -194,14 +197,14 @@ RocketReady.level2.prototype = {
 			this.loadLevel3()
 		}
 
+	  if (this.cursors.up.isDown && this.player.body.touching.down && hitPlatform) {
+	    this.player.body.velocity.y = -350;
+	  }
+
 		// if (this.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
 	  //   {
 	        // fireBullet();
 	  //   }
-
-	  if (this.cursors.up.isDown && this.player.body.touching.down && hitPlatform) {
-	    this.player.body.velocity.y = -350;
-	  }
 
 	  function catchGem (player, gem) {
 	    gem.body.position = player.body.position;
@@ -210,16 +213,20 @@ RocketReady.level2.prototype = {
 	  function depositGem (gem, rocket) {
 	    gem.kill();
 			this.gemsLeft--;
-	    this.gemsLeftText.text = 'Gems left: ' + this.gemsLeft;
+	    this.gemsLeftText.text = this.gemsLeft === 1 ? '' + this.gemsLeft + ' gem remaining!' : '' + this.gemsLeft + ' gems remaining!';
+			this.score += 10;
+			this.scoreText.text = 'Score: ' + (score + this.score);
 
 			if (!this.gems.countLiving() > 0) {
-				this.launchRocket(rocket)
+				this.gemsLeftText.text = '';
+				this.launchRocket(rocket);
 			}
 	  }
 
 		function deathByMonster (player, monster) {
 			livesRemaining--;
 			this.gemsLeft = 8;
+			this.score = 0;
 			if (livesRemaining === 0) {
 				this.state.start('gameOver')
 			} else {
@@ -230,6 +237,5 @@ RocketReady.level2.prototype = {
 	},
 
 	render: function () {
-
 	}
 };
