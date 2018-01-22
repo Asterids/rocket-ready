@@ -847,7 +847,7 @@ RocketReady.winScreen.prototype = {
 		score = 0;
 		livesRemaining = 5;
 		if (this.cursors.up.isDown) {
-			this.state.start('level1');
+			this.state.start('startMenu');
 		}
 	}
 }
@@ -889,7 +889,7 @@ RocketReady.gameOver.prototype = {
 		score = 0;
 		livesRemaining = 5;
 		if (this.cursors.up.isDown) {
-			this.state.start('level1');
+			this.state.start('startMenu');
 		}
 	}
 }
