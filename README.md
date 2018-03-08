@@ -8,7 +8,7 @@ Our rocket needs power gems to launch! Collect the gems using the arrow keys and
 
 ## Note
 
-This project was created during a four-day sprint hackathon, and as such it currently functions properly but is in need of a code-makeover! I am working to make the code modular, after which I will breathe much easier.
+This project was created during a four-day sprint hackathon, and as such it currently functions properly but is sorely in need of a refactor! I am working to make the code modular, after which I will breathe much easier.
 
 ## How to Play
 
