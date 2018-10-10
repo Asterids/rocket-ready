@@ -10,14 +10,14 @@
   "author": "R. Hill",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.18.2",
-    "express": "^4.16.2",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
     "fs": "0.0.1-security",
-    "morgan": "^1.9.0",
+    "morgan": "^1.9.1",
     "path": "^0.12.7",
-    "phaser": "^2.6.2"
+    "phaser": "^3.14.0"
   },
   "devDependencies": {
-    "webpack": "^3.10.0"
+    "webpack": "^4.20.2"
   }
 }
